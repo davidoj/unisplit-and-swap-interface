@@ -38,6 +38,8 @@ import {
   useSwapActionHandlers,
   useSwapState
 } from '../../state/swap/hooks'
+import { useSplitState, useSplitActionHandlers } from '../../state/split/hooks'
+import { splitField} from '../../state/split/actions'
 import { useExpertModeManager, useUserSlippageTolerance, useUserSingleHopOnly } from '../../state/user/hooks'
 import { LinkStyledButton, TYPE } from '../../theme'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
@@ -142,6 +144,22 @@ export default function Swap() {
     [onUserInput]
   )
 
+  // split state
+  const { typedSplitValue } = useSplitState()
+
+  const { onSplitCurrencySelection, onSplitUserInput } = useSplitActionHandlers()
+
+  // to be implemented
+  // const { conditionId, partition, collateral } = useDerivedSplitInfo()
+
+  const handleTypeSplit = useCallback(
+    (value: string) => {
+      onSplitUserInput(value)
+    },
+    [onSplitUserInput]
+  )
+
+
   // modal and loading
   const [{ showConfirm, tradeToConfirm, swapErrorMessage, attemptingTxn, txHash }, setSwapState] = useState<{
     showConfirm: boolean
@@ -161,7 +179,8 @@ export default function Swap() {
     [independentField]: typedValue,
     [dependentField]: showWrap
       ? parsedAmounts[independentField]?.toExact() ?? ''
-      : parsedAmounts[dependentField]?.toSignificant(6) ?? ''
+      : parsedAmounts[dependentField]?.toSignificant(6) ?? '',
+    [splitField] : typedSplitValue
   }
 
   const route = trade?.route
@@ -280,10 +299,23 @@ export default function Swap() {
     },
     [onCurrencySelection]
   )
+  
+  const handleSplitSelect = useCallback(
+    splitCurrency => {
+      setApprovalSubmitted(false) // reset 2 step UI for approvals
+      onSplitCurrencySelection(splitCurrency)
+    },
+    [onSplitCurrencySelection]
+  )
 
   const handleMaxInput = useCallback(() => {
     maxAmountInput && onUserInput(Field.INPUT, maxAmountInput.toExact())
   }, [maxAmountInput, onUserInput])
+
+  const handleMaxSplit = useCallback(() => {
+    maxAmountInput && onSplitUserInput( maxAmountInput.toExact())
+  }, [maxAmountInput, onSplitUserInput])
+
 
   const handleOutputSelect = useCallback(outputCurrency => onCurrencySelection(Field.OUTPUT, outputCurrency), [
     onCurrencySelection
@@ -316,6 +348,21 @@ export default function Swap() {
             onDismiss={handleConfirmDismiss}
           />
 
+          <AutoColumn gap={'md'}>
+            <CurrencyInputPanel
+              label={'Split'}
+              value={formattedAmounts[splitField]}
+              showMaxButton={!atMaxAmountInput}
+              //currency = {collateral}
+              onUserInput={handleTypeSplit}
+              onMax={handleMaxSplit}
+              onCurrencySelect={handleSplitSelect}
+              id="split-currency-input"
+            />
+            <AutoColumn justify="space-between">
+
+            </AutoColumn>
+          </AutoColumn>
           <AutoColumn gap={'md'}>
             <CurrencyInputPanel
               label={independentField === Field.OUTPUT && !showWrap && trade ? 'From (estimated)' : 'From'}

@@ -1,48 +1,43 @@
 import { createReducer } from '@reduxjs/toolkit'
-import { replaceSplitState, selectCurrency, setRecipient, switchCurrencies, typeInput } from './actions'
+import { replaceSplitState, selectCurrency, typeInput } from './actions'
 
 export interface SplitState {
   readonly conditionId: string
-  readonly typedValue: string
-  readonly currencyId: string
+  readonly typedSplitValue: string
+  readonly collateralId: string
   // the typed recipient address or ENS name, or null if split should go to sender
-  readonly recipient: string | null
 }
 
 const initialState: SplitState = {
-  conditionId: ''
-  typedValue: '',
-  currencyId: '',
-  recipient: null
+  conditionId: '',
+  typedSplitValue: '',
+  collateralId: ''
 }
 
 export default createReducer<SplitState>(initialState, builder =>
   builder
     .addCase(
       replaceSplitState,
-      (state, { payload: { typedValue, conditionId, currencyId, recipient } }) => {
+      (state, { payload: { typedSplitValue, conditionId, collateralId } }) => {
         return {
-          currencyId: currencyId,
+          collateralId: collateralId,
           conditionId: conditionId,
-          typedValue: typedValue,
-          recipient: recipient
+          typedSplitValue: typedSplitValue
         }
       }
     )
-    .addCase(selectCurrency, (state, { payload: { currencyId } }) => {
+    .addCase(selectCurrency, (state, { payload: { collateralId } }) => {
         return {
           ...state,
-          currencyId: currencyId
+          collateralId: collateralId
         }
       } 
     )
-    .addCase(typeInput, (state, { payload: { typedValue } }) => {
+    .addCase(typeInput, (state, { payload: { typedSplitValue } }) => {
       return {
         ...state,
-        typedValue: typedValue
+        typedSplitValue: typedSplitValue
       }
     })
-    .addCase(setRecipient, (state, { payload: { recipient } }) => {
-      state.recipient = recipient
-    })
+
 )
