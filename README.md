@@ -1,31 +1,16 @@
-# Uniswap Interface
+# Uniswap Interface + Gnosis Conditional Tokens
 
 [![Lint](https://github.com/Uniswap/uniswap-interface/workflows/Lint/badge.svg)](https://github.com/Uniswap/uniswap-interface/actions?query=workflow%3ALint)
 [![Tests](https://github.com/Uniswap/uniswap-interface/workflows/Tests/badge.svg)](https://github.com/Uniswap/uniswap-interface/actions?query=workflow%3ATests)
 [![Styled With Prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://prettier.io/)
 
-An open source interface for Uniswap -- a protocol for decentralized exchange of Ethereum tokens.
+This is a fork of the Uniswap interface that incorporates elements of the Gnosis conditional token explorer to facilitate conditional token exchanges. It doesn't work yet.
 
-- Website: [uniswap.org](https://uniswap.org/)
-- Interface: [app.uniswap.org](https://app.uniswap.org)
-- Docs: [uniswap.org/docs/](https://uniswap.org/docs/)
-- Twitter: [@UniswapProtocol](https://twitter.com/UniswapProtocol)
-- Reddit: [/r/Uniswap](https://www.reddit.com/r/Uniswap/)
-- Email: [contact@uniswap.org](mailto:contact@uniswap.org)
-- Discord: [Uniswap](https://discord.gg/FCfyBSbCU5)
-- Whitepaper: [Link](https://hackmd.io/C-DvwDSfSxuh-Gd4WKE_ig)
+- Uniswap Website: [uniswap.org](https://uniswap.org/)
+- Original Uniswap Interface: [app.uniswap.org](https://app.uniswap.org)
+- Gnosis Website: [gnosis.io](https://gnosis.io/)
+- Conditional token explorer: [cte.gnosis.io](https://cte.gnosis.io/)
 
-## Accessing the Uniswap Interface
-
-To access the Uniswap Interface, use an IPFS gateway link from the
-[latest release](https://github.com/Uniswap/uniswap-interface/releases/latest), 
-or visit [app.uniswap.org](https://app.uniswap.org).
-
-## Listing a token
-
-Please see the
-[@uniswap/default-token-list](https://github.com/uniswap/default-token-list) 
-repository.
 
 ## Development
 
