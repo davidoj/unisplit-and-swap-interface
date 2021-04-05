@@ -1,8 +1,8 @@
 {
-  "name": "@uniswap/interface",
-  "description": "Uniswap Interface",
+  "name": "@uniswapnsplit/interface",
+  "description": "Uniswap and Split Interface",
   "homepage": ".",
-  "private": true,
+  "private": false,
   "devDependencies": {
     "@ethersproject/experimental": "^5.0.1",
     "@popperjs/core": "^2.4.4",
@@ -125,6 +125,12 @@
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "@uniswap/default-token-list": "^2.0.0"
-  }
+    "@uniswap/default-token-list": "^2.0.0",
+    "graphql": "^15.5.0",
+    "graphql-tag": "^2.11.0"
+  },
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/davidoj/uniswap-interface.git",
+  "author": "david j <davidoj@fastmail.com.au>"
 }
