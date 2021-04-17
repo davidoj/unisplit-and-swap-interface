@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit'
-import { replaceSplitState, selectCurrency, typeInput } from './actions'
+import { replaceSplitState, selectCurrency, typeInput, selectCondition } from './actions'
 
 export interface SplitState {
   readonly conditionId: string
@@ -39,5 +39,12 @@ export default createReducer<SplitState>(initialState, builder =>
         typedSplitValue: typedSplitValue
       }
     })
+    .addCase(selectCondition, (state, { payload: { conditionId } }) => {
+        return {
+          ...state,
+          conditionId: conditionId
+        }
+      }
+    )
 
 )
