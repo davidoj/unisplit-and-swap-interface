@@ -19,6 +19,7 @@ import TransactionUpdater from './state/transactions/updater'
 import UserUpdater from './state/user/updater'
 import ThemeProvider, { FixedGlobalStyle, ThemedGlobalStyle } from './theme'
 import getLibrary from './utils/getLibrary'
+import { ApolloProviderWrapper } from './contexts/Apollo'
 
 const Web3ProviderNetwork = createWeb3ReactRoot(NetworkContextName)
 
@@ -61,15 +62,17 @@ ReactDOM.render(
     <Web3ReactProvider getLibrary={getLibrary}>
       <Web3ProviderNetwork getLibrary={getLibrary}>
         <Blocklist>
-          <Provider store={store}>
-            <Updaters />
-            <ThemeProvider>
-              <ThemedGlobalStyle />
-              <HashRouter>
-                <App />
-              </HashRouter>
-            </ThemeProvider>
-          </Provider>
+          <ApolloProviderWrapper>
+            <Provider store={store}>
+              <Updaters />
+              <ThemeProvider>
+                <ThemedGlobalStyle />
+                <HashRouter>
+                  <App />
+                </HashRouter>
+              </ThemeProvider>
+            </Provider>
+          </ApolloProviderWrapper>
         </Blocklist>
       </Web3ProviderNetwork>
     </Web3ReactProvider>
