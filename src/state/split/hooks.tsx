@@ -1,9 +1,11 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { AppDispatch, AppState } from '../index'
 import { useCallback, } from 'react'
-// import { useCurrency } from '../../hooks/Tokens'
+import { useCurrency } from '../../hooks/Tokens'
 import { Currency, ETHER, Token } from '@uniswap/sdk'
-import { selectCurrency, typeInput } from './actions'
+import { selectCollateral, typeCollateralInput, selectCondition } from './actions'
+
+import { GetWrappedTokens_wrappedTokens_position_conditions } from 'queries/__generated__/GetWrappedTokens'
 
 
 export function useSplitState(): AppState['split'] {
@@ -11,30 +13,50 @@ export function useSplitState(): AppState['split'] {
 }
 
 export function useSplitActionHandlers(): {
-  onSplitCurrencySelection: ( currency: Currency) => void
-  onSplitUserInput: ( typedSplitValue: string) => void
+  onCollateralCurrencySelection: ( collateral: Currency) => void
+  onCollateralUserInput: ( typedCollateralValue: string) => void
+  onConditionSelection: ( condition: GetWrappedTokens_wrappedTokens_position_conditions ) => void
 } {
   const dispatch = useDispatch<AppDispatch>()
-  const onSplitCurrencySelection = useCallback(
-    (currency: Currency) => {
+  const onCollateralCurrencySelection = useCallback(
+    (collateral: Currency) => {
       dispatch(
-        selectCurrency({
-          collateralId: currency instanceof Token ? currency.address : currency === ETHER ? 'ETH' : ''
+        selectCollateral({
+          collateralId: collateral instanceof Token ? collateral.address : collateral === ETHER ? 'ETH' : ''
         })
       )
     },
     [dispatch]
   )
 
-  const onSplitUserInput = useCallback(
-    (typedSplitValue: string) => {
-      dispatch(typeInput({ typedSplitValue }))
+  const onCollateralUserInput = useCallback(
+    (typedCollateralValue: string) => {
+      dispatch(typeCollateralInput({ typedCollateralValue }))
     },
     [dispatch]
   )
 
+  const onConditionSelection = useCallback(
+    (condition: GetWrappedTokens_wrappedTokens_position_conditions) => 
+     { dispatch(selectCondition( {condition: condition} )) }
+    ,
+    [dispatch]
+  )
+
   return {
-    onSplitCurrencySelection,
-    onSplitUserInput
+    onCollateralCurrencySelection,
+    onCollateralUserInput,
+    onConditionSelection
   }
 }
+
+export function useDerivedSplitInfo(): {
+  collateral: Currency | null | undefined
+}
+  {
+    const { collateralId }= useSplitState()
+    const collateral = useCurrency(collateralId)
+    return {
+      collateral
+    }
+  }

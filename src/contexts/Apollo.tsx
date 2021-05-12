@@ -1,10 +1,13 @@
-import { ApolloProvider } from '@apollo/react-hooks'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { ApolloClient } from 'apollo-client'
-import { from } from 'apollo-link'
-import { HttpLink } from 'apollo-link-http'
-import apolloLogger from 'apollo-link-logger'
-import { RetryLink } from 'apollo-link-retry'
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  HttpLink,
+  from
+} from "@apollo/client"
+import { RetryLink } from "@apollo/client/link/retry"
+import { onError } from '@apollo/client/link/error'
+// import apolloLogger from 'apollo-link-logger'
 import React from 'react'
 
 
@@ -40,7 +43,20 @@ export const ApolloProviderWrapper = ({ children }: Props) => {
     return CTEHttpLink
   },[] )
 
+  const errorLink = onError(error => {
+    const { graphQLErrors, networkError } = error
+
+    if (graphQLErrors)
+        graphQLErrors.map(({ message, locations, path }) =>
+            console.log(
+                `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+            ),
+        );
+    if (networkError) console.log(`[Network error]: ${networkError}`, networkError);
+  });  
+
   const link = from([
+    errorLink,
     new RetryLink({
       delay: {
         initial: 100,
@@ -55,7 +71,7 @@ export const ApolloProviderWrapper = ({ children }: Props) => {
   ])
 
   const client = new ApolloClient({
-    link: from([apolloLogger, link]),
+    link: link,
     cache: new InMemoryCache(),
     defaultOptions: {
       watchQuery: {

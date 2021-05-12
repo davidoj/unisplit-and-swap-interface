@@ -40,3 +40,12 @@ export const GetConditionWithQuestionsOfPosition = gql`
   ${conditionWithQuestionsFragment}
   ${questionFragment}
 `
+
+export const GetQuestions = gql`
+  query GetQuestions($first: Int!) {
+    questions(first: $first) {
+      ...QuestionData
+    }
+  }
+  ${questionFragment}
+`

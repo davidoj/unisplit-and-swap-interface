@@ -10,6 +10,7 @@ import Card, { GreyCard } from '../../components/Card'
 import Column, { AutoColumn } from '../../components/Column'
 import ConfirmSwapModal from '../../components/swap/ConfirmSwapModal'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
+import ConditionSelectPanel from '../../components/ConditionSelectPanel'
 import { SwapPoolTabs } from '../../components/NavigationTabs'
 import { AutoRow, RowBetween } from '../../components/Row'
 import AdvancedSwapDetailsDropdown from '../../components/swap/AdvancedSwapDetailsDropdown'
@@ -38,8 +39,11 @@ import {
   useSwapActionHandlers,
   useSwapState
 } from '../../state/swap/hooks'
-import { useSplitState, useSplitActionHandlers } from '../../state/split/hooks'
-import { splitField} from '../../state/split/actions'
+import { 
+  useSplitState, 
+  useSplitActionHandlers,
+  useDerivedSplitInfo } from '../../state/split/hooks'
+import { collateralField} from '../../state/split/actions'
 import { useExpertModeManager, useUserSlippageTolerance, useUserSingleHopOnly } from '../../state/user/hooks'
 import { LinkStyledButton, TYPE } from '../../theme'
 import { maxAmountSpend } from '../../utils/maxAmountSpend'
@@ -145,18 +149,17 @@ export default function Swap() {
   )
 
   // split state
-  const { typedSplitValue } = useSplitState()
+  const { typedCollateralValue, condition } = useSplitState()
 
-  const { onSplitCurrencySelection, onSplitUserInput } = useSplitActionHandlers()
+  const { onCollateralCurrencySelection, onCollateralUserInput, onConditionSelection } = useSplitActionHandlers()
 
-  // to be implemented
-  // const { conditionId, partition, collateral } = useDerivedSplitInfo()
+  const { collateral } = useDerivedSplitInfo()
 
   const handleTypeSplit = useCallback(
     (value: string) => {
-      onSplitUserInput(value)
+      onCollateralUserInput(value)
     },
-    [onSplitUserInput]
+    [onCollateralUserInput]
   )
 
 
@@ -180,7 +183,7 @@ export default function Swap() {
     [dependentField]: showWrap
       ? parsedAmounts[independentField]?.toExact() ?? ''
       : parsedAmounts[dependentField]?.toSignificant(6) ?? '',
-    [splitField] : typedSplitValue
+    [collateralField] : typedCollateralValue
   }
 
   const route = trade?.route
@@ -300,12 +303,19 @@ export default function Swap() {
     [onCurrencySelection]
   )
   
-  const handleSplitSelect = useCallback(
-    splitCurrency => {
+  const handleCollateralSelect = useCallback(
+    collateralCurrency => {
       setApprovalSubmitted(false) // reset 2 step UI for approvals
-      onSplitCurrencySelection(splitCurrency)
+      onCollateralCurrencySelection(collateralCurrency)
     },
-    [onSplitCurrencySelection]
+    [onCollateralCurrencySelection]
+  )
+
+ const handleConditionSelect = useCallback(
+    condition => {
+      onConditionSelection(condition)
+    },
+    [onConditionSelection]
   )
 
   const handleMaxInput = useCallback(() => {
@@ -313,8 +323,8 @@ export default function Swap() {
   }, [maxAmountInput, onUserInput])
 
   const handleMaxSplit = useCallback(() => {
-    maxAmountInput && onSplitUserInput( maxAmountInput.toExact())
-  }, [maxAmountInput, onSplitUserInput])
+    maxAmountInput && onCollateralUserInput( maxAmountInput.toExact())
+  }, [maxAmountInput, onCollateralUserInput])
 
 
   const handleOutputSelect = useCallback(outputCurrency => onCurrencySelection(Field.OUTPUT, outputCurrency), [
@@ -349,14 +359,16 @@ export default function Swap() {
           />
 
           <AutoColumn gap={'md'}>
-            <CurrencyInputPanel
+            <ConditionSelectPanel
               label={'Split'}
-              value={formattedAmounts[splitField]}
+              value={formattedAmounts[collateralField]}
               showMaxButton={!atMaxAmountInput}
-              //currency = {collateral}
+              collateral = {collateral}
+              condition = {condition}
               onUserInput={handleTypeSplit}
               onMax={handleMaxSplit}
-              onCurrencySelect={handleSplitSelect}
+              onConditionSelect={handleConditionSelect}
+              onCollateralSelect={handleCollateralSelect}
               id="split-currency-input"
             />
             <AutoColumn justify="space-between">
