@@ -13,7 +13,6 @@ import { CloseIcon, TYPE } from '../../theme'
 import React, { useCallback, useRef } from 'react'
 import ConditionList from './ConditionList'
 
-
 import { GetWrappedTokens_wrappedTokens, GetWrappedTokens_wrappedTokens_position_conditions } from 'queries/__generated__/GetWrappedTokens'
 
 
@@ -27,9 +26,10 @@ interface ConditionSearchProps {
   isOpen: boolean
   onDismiss: () => void
   selectedCondition?: GetWrappedTokens_wrappedTokens_position_conditions | null
-  onConditionSelect: (condition: GetWrappedTokens_wrappedTokens_position_conditions) => void
+  onConditionSelect: ( condition: GetWrappedTokens_wrappedTokens_position_conditions ) => void
   // conditionWrappedTokens: GetWrappedTokens_wrappedTokens[]
 }
+
 
 function extractConditions (wrappedTokens : GetWrappedTokens_wrappedTokens[] | undefined) {
   if (wrappedTokens === undefined || wrappedTokens.length == 0) {

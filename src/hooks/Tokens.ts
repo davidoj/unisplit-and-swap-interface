@@ -1,8 +1,9 @@
-import { TokenAddressMap, useDefaultTokenList, useUnsupportedTokenList } from './../state/lists/hooks'
+import { TokenAddressMap, useDefaultTokenList, useUnsupportedTokenList, EMPTY_LIST } from './../state/lists/hooks'
 import { parseBytes32String } from '@ethersproject/strings'
 import { Currency, ETHER, Token, currencyEquals } from '@uniswap/sdk'
 import { useMemo } from 'react'
-import { useCombinedActiveList, useCombinedInactiveList } from '../state/lists/hooks'
+// import { useCombinedActiveList, useCombinedInactiveList } from '../state/lists/hooks'
+import { useCombinedInactiveList } from '../state/lists/hooks'
 import { NEVER_RELOAD, useSingleCallResult } from '../state/multicall/hooks'
 import { useUserAddedTokens } from '../state/user/hooks'
 import { isAddress } from '../utils'
@@ -52,8 +53,10 @@ export function useDefaultTokens(): { [address: string]: Token } {
 }
 
 export function useAllTokens(): { [address: string]: Token } {
-  const allTokens = useCombinedActiveList()
-  return useTokensFromMap(allTokens, true)
+  // const allTokens = useCombinedActiveList()
+  // return useTokensFromMap(allTokens, true)
+  // Testing with user added only
+  return useTokensFromMap(EMPTY_LIST, true)
 }
 
 export function useAllInactiveTokens(): { [address: string]: Token } {

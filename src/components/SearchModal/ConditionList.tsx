@@ -1,7 +1,6 @@
 import React, { CSSProperties, useCallback, MutableRefObject, useMemo } from 'react'
 import { FixedSizeList } from 'react-window'
 import { Text } from 'rebass'
-import { useActiveWeb3React } from '../../hooks'
 import { TYPE } from '../../theme'
 import Column from '../Column'
 import { MenuItem } from './styleds'
@@ -67,7 +66,6 @@ export default function ConditionList({
     return formatted
   }, [breakIndex, conditions])
 
-  const { chainId } = useActiveWeb3React()
   const theme = useTheme()
 
   const Row = useCallback(
@@ -86,7 +84,6 @@ export default function ConditionList({
       )
     },
     [
-      chainId,
       onConditionSelect,
       selectedCondition,
       breakIndex,

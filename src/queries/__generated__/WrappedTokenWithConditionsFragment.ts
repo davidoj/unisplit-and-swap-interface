@@ -13,6 +13,11 @@ export interface WrappedTokenWithConditionsFragment_position_conditions_question
   title: string | null;
 }
 
+export interface WrappedTokenWithConditionsFragment_position_conditions_positions {
+  __typename: "Position";
+  collateralTokenAddress: string;
+}
+
 export interface WrappedTokenWithConditionsFragment_position_conditions {
   __typename: "Condition";
   id: string;
@@ -21,6 +26,7 @@ export interface WrappedTokenWithConditionsFragment_position_conditions {
   outcomeSlotCount: number;
   resolved: boolean;
   question: WrappedTokenWithConditionsFragment_position_conditions_question | null;
+  positions: WrappedTokenWithConditionsFragment_position_conditions_positions[] | null;
 }
 
 export interface WrappedTokenWithConditionsFragment_position {

@@ -13,6 +13,11 @@ export interface GetConditionWithQuestionsOfPosition_position_conditions_questio
   title: string | null;
 }
 
+export interface GetConditionWithQuestionsOfPosition_position_conditions_positions {
+  __typename: "Position";
+  collateralTokenAddress: string;
+}
+
 export interface GetConditionWithQuestionsOfPosition_position_conditions {
   __typename: "Condition";
   id: string;
@@ -21,6 +26,7 @@ export interface GetConditionWithQuestionsOfPosition_position_conditions {
   outcomeSlotCount: number;
   resolved: boolean;
   question: GetConditionWithQuestionsOfPosition_position_conditions_question | null;
+  positions: GetConditionWithQuestionsOfPosition_position_conditions_positions[] | null;
 }
 
 export interface GetConditionWithQuestionsOfPosition_position {

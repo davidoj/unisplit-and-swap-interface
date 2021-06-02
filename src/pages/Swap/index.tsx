@@ -54,6 +54,12 @@ import Loader from '../../components/Loader'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
 import UnsupportedCurrencyFooter from 'components/swap/UnsupportedCurrencyFooter'
 import { isTradeBetter } from 'utils/trades'
+import { useAddUserToken, useRemoveUserAddedToken } from 'state/user/hooks'
+import { getNetworkLibrary } from 'connectors'
+import { GetWrappedTokens_wrappedTokens_position_conditions } from 'queries/__generated__/GetWrappedTokens'
+
+
+
 
 export default function Swap() {
   const loadedUrlParams = useDefaultsFromURLSearch()
@@ -80,7 +86,7 @@ export default function Swap() {
       return !Boolean(token.address in defaultTokens)
     })
 
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const theme = useContext(ThemeContext)
 
   // toggle wallet when disconnected
@@ -162,6 +168,29 @@ export default function Swap() {
     [onCollateralUserInput]
   )
 
+  const provider = getNetworkLibrary()
+
+  const removeToken = useRemoveUserAddedToken()
+
+  const addToken = useAddUserToken()
+
+  
+  const handleCollateralSelect = useCallback(
+    collateralCurrency => {
+      setApprovalSubmitted(false) // reset 2 step UI for approvals
+      onCollateralCurrencySelection(collateralCurrency)
+    },
+    [onCollateralCurrencySelection]
+  )
+
+  const handleConditionSelect = useCallback(
+    ( newCondition : GetWrappedTokens_wrappedTokens_position_conditions )  => {
+      const tokenAddresses = newCondition?.positions?.map(( position ) => position.collateralTokenAddress )
+      console.log(condition)
+      onConditionSelection( newCondition, condition, provider, removeToken, addToken, tokenAddresses, chainId)
+    },
+    [onConditionSelection, condition, addToken, chainId, provider, removeToken]
+  )
 
   // modal and loading
   const [{ showConfirm, tradeToConfirm, swapErrorMessage, attemptingTxn, txHash }, setSwapState] = useState<{
@@ -301,21 +330,6 @@ export default function Swap() {
       onCurrencySelection(Field.INPUT, inputCurrency)
     },
     [onCurrencySelection]
-  )
-  
-  const handleCollateralSelect = useCallback(
-    collateralCurrency => {
-      setApprovalSubmitted(false) // reset 2 step UI for approvals
-      onCollateralCurrencySelection(collateralCurrency)
-    },
-    [onCollateralCurrencySelection]
-  )
-
- const handleConditionSelect = useCallback(
-    condition => {
-      onConditionSelection(condition)
-    },
-    [onConditionSelection]
   )
 
   const handleMaxInput = useCallback(() => {

@@ -18,6 +18,9 @@ const conditionWithQuestionsFragment = gql`
     question {
       ...QuestionData
     }
+    positions {
+      collateralTokenAddress
+    }
   }
 `
 
