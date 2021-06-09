@@ -7,7 +7,7 @@ import { useActiveWeb3React } from '../../hooks'
 import { WrappedTokenInfo, useCombinedActiveList } from '../../state/lists/hooks'
 import { useCurrencyBalance } from '../../state/wallet/hooks'
 import { TYPE } from '../../theme'
-import { useIsUserAddedToken, useAllInactiveTokens } from '../../hooks/Tokens'
+import { useIsUserAddedToken } from '../../hooks/Tokens'
 import Column from '../Column'
 import { RowFixed, RowBetween } from '../Row'
 import CurrencyLogo from '../CurrencyLogo'
@@ -15,8 +15,8 @@ import { MouseoverTooltip } from '../Tooltip'
 import { MenuItem } from './styleds'
 import Loader from '../Loader'
 import { isTokenOnList } from '../../utils'
-import ImportRow from './ImportRow'
-import { wrappedCurrency } from 'utils/wrappedCurrency'
+// import ImportRow from './ImportRow'
+// import { wrappedCurrency } from 'utils/wrappedCurrency'
 import { LightGreyCard } from 'components/Card'
 import TokenListLogo from '../../assets/svg/tokenlist.svg'
 import QuestionHelper from 'components/QuestionHelper'
@@ -177,9 +177,9 @@ export default function CurrencyList({
   const { chainId } = useActiveWeb3React()
   const theme = useTheme()
 
-  const inactiveTokens: {
-    [address: string]: Token
-  } = useAllInactiveTokens()
+  // const inactiveTokens: {
+  //   [address: string]: Token
+  // } = useAllInactiveTokens()
 
   const Row = useCallback(
     ({ data, index, style }) => {
@@ -188,9 +188,9 @@ export default function CurrencyList({
       const otherSelected = Boolean(otherCurrency && currencyEquals(otherCurrency, currency))
       const handleSelect = () => onCurrencySelect(currency)
 
-      const token = wrappedCurrency(currency, chainId)
+      // const token = wrappedCurrency(currency, chainId)
 
-      const showImport = inactiveTokens && token && Object.keys(inactiveTokens).includes(token.address)
+      // const showImport = inactiveTokens && token && Object.keys(inactiveTokens).includes(token.address)
 
       if (index === breakIndex || !data) {
         return (
@@ -210,17 +210,17 @@ export default function CurrencyList({
         )
       }
 
-      if (showImport && token) {
-        return (
-          <ImportRow
-            style={style}
-            token={token}
-            showImportView={showImportView}
-            setImportToken={setImportToken}
-            dim={true}
-          />
-        )
-      } else {
+      // if (showImport && token) {
+      //   return (
+      //     <ImportRow
+      //       style={style}
+      //       token={token}
+      //       showImportView={showImportView}
+      //       setImportToken={setImportToken}
+      //       dim={true}
+      //     />
+      //   )
+      // } else {
         return (
           <CurrencyRow
             style={style}
@@ -230,11 +230,11 @@ export default function CurrencyList({
             otherSelected={otherSelected}
           />
         )
-      }
-    },
+      },
+    // },
     [
       chainId,
-      inactiveTokens,
+      // inactiveTokens,
       onCurrencySelect,
       otherCurrency,
       selectedCurrency,

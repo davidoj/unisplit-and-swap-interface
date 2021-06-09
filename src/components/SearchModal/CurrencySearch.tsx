@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { FixedSizeList } from 'react-window'
 import { Text } from 'rebass'
 import { useActiveWeb3React } from '../../hooks'
-import { useAllTokens, useToken, useIsUserAddedToken, useFoundOnInactiveList } from '../../hooks/Tokens'
+import { useAllTokens, useToken, useIsUserAddedToken } from '../../hooks/Tokens'
 import { CloseIcon, TYPE, ButtonText, IconWrapper } from '../../theme'
 import { isAddress } from '../../utils'
 import Column from '../Column'
@@ -156,8 +156,8 @@ export function CurrencySearch({
   useOnClickOutside(node, open ? toggle : undefined)
 
   // if no results on main list, show option to expand into inactive
-  const inactiveTokens = useFoundOnInactiveList(debouncedQuery)
-  const filteredInactiveTokens: Token[] = useSortedTokensByQuery(inactiveTokens, debouncedQuery)
+  // const inactiveTokens = useFoundOnInactiveList(debouncedQuery)
+  // const filteredInactiveTokens: Token[] = useSortedTokensByQuery(inactiveTokens, debouncedQuery)
 
   return (
     <ContentWrapper>
@@ -189,7 +189,8 @@ export function CurrencySearch({
         <Column style={{ padding: '20px 0', height: '100%' }}>
           <ImportRow token={searchToken} showImportView={showImportView} setImportToken={setImportToken} />
         </Column>
-      ) : filteredSortedTokens?.length > 0 || filteredInactiveTokens?.length > 0 ? (
+      // ) : filteredSortedTokens?.length > 0 || filteredInactiveTokens?.length > 0 ? (
+      ) : filteredSortedTokens?.length > 0 ? (
         <div style={{ flex: '1' }}>
           <AutoSizer disableWidth>
             {({ height }) => (
@@ -197,9 +198,11 @@ export function CurrencySearch({
                 height={height}
                 showETH={showETH}
                 currencies={
-                  filteredInactiveTokens ? filteredSortedTokens.concat(filteredInactiveTokens) : filteredSortedTokens
+                  // filteredInactiveTokens ? filteredSortedTokens.concat(filteredInactiveTokens) : filteredSortedTokens
+                  filteredSortedTokens
                 }
-                breakIndex={inactiveTokens && filteredSortedTokens ? filteredSortedTokens.length : undefined}
+                // breakIndex={inactiveTokens && filteredSortedTokens ? filteredSortedTokens.length : undefined}
+                breakIndex={filteredSortedTokens ? filteredSortedTokens.length + 1 : undefined}
                 onCurrencySelect={handleCurrencySelect}
                 otherCurrency={otherSelectedCurrency}
                 selectedCurrency={selectedCurrency}

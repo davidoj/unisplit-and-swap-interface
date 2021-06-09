@@ -54,7 +54,7 @@ import Loader from '../../components/Loader'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
 import UnsupportedCurrencyFooter from 'components/swap/UnsupportedCurrencyFooter'
 import { isTradeBetter } from 'utils/trades'
-import { useAddUserToken, useRemoveUserAddedToken } from 'state/user/hooks'
+import { useAddUserToken, useRemoveUserAddedToken, useUserAddedTokens } from 'state/user/hooks'
 import { getNetworkLibrary } from 'connectors'
 import { GetWrappedTokens_wrappedTokens_position_conditions } from 'queries/__generated__/GetWrappedTokens'
 
@@ -174,6 +174,8 @@ export default function Swap() {
 
   const addToken = useAddUserToken()
 
+  const userAddedTokens: Token[] = useUserAddedTokens()
+
   
   const handleCollateralSelect = useCallback(
     collateralCurrency => {
@@ -186,10 +188,9 @@ export default function Swap() {
   const handleConditionSelect = useCallback(
     ( newCondition : GetWrappedTokens_wrappedTokens_position_conditions )  => {
       const tokenAddresses = newCondition?.positions?.map(( position ) => position.collateralTokenAddress )
-      console.log(condition)
-      onConditionSelection( newCondition, condition, provider, removeToken, addToken, tokenAddresses, chainId)
+      onConditionSelection( newCondition, userAddedTokens, provider, removeToken, addToken, tokenAddresses, chainId)
     },
-    [onConditionSelection, condition, addToken, chainId, provider, removeToken]
+    [onConditionSelection, userAddedTokens, addToken, chainId, provider, removeToken]
   )
 
   // modal and loading

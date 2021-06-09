@@ -7,6 +7,7 @@ import { selectCollateral, typeCollateralInput, selectCondition } from './action
 import { Web3Provider } from '@ethersproject/providers'
 import { getContract } from 'utils'
 
+
 import { GetWrappedTokens_wrappedTokens_position_conditions } from 'queries/__generated__/GetWrappedTokens'
 
 async function getToken(tokenAddress: string, chainId: number, provider: Web3Provider ): Promise<Token | undefined | null> {
@@ -32,7 +33,7 @@ async function getToken(tokenAddress: string, chainId: number, provider: Web3Pro
 
 function updateCollateralTokens( 
   condition: GetWrappedTokens_wrappedTokens_position_conditions, 
-  oldCondition: GetWrappedTokens_wrappedTokens_position_conditions | null,
+  userAddedTokens: Token[],
   removeToken: ( chainId: number, address: string ) => void,
   addToken: ( token: Token ) => void,
   tokenAddresses: string[] | undefined,
@@ -40,14 +41,13 @@ function updateCollateralTokens(
   provider: Web3Provider
   ) {
 
-  console.log(oldCondition)
-  if ( chainId && oldCondition?.positions ) {
-    console.log('removing old collateral tokens')
-    oldCondition.positions.map( (position) => removeToken( chainId, position?.collateralTokenAddress ))  
+ if (chainId && userAddedTokens) {
+    userAddedTokens.map(token => {
+      return removeToken(chainId, token.address)
+    })
   }
 
   if (chainId ) {
-    console.log('adding new collateral tokens')
     tokenAddresses?.map( (tokenAddress) => getToken(tokenAddress, chainId, provider).then( ( t ) => {
       if (t) {
         addToken( t )
@@ -64,7 +64,7 @@ export function useSplitActionHandlers(): {
   onCollateralCurrencySelection: ( collateral: Currency ) => void
   onCollateralUserInput: ( typedCollateralValue: string ) => void
   onConditionSelection: ( condition: GetWrappedTokens_wrappedTokens_position_conditions,
-                          oldCondition: GetWrappedTokens_wrappedTokens_position_conditions | null,
+                          userAddedTokens: Token[],
                           provider: Web3Provider,
                           removeToken: ( chainId: number, address: string) => void,
                           addToken: ( token: Token ) => void,
@@ -92,14 +92,14 @@ export function useSplitActionHandlers(): {
 
   const onConditionSelection = useCallback(
       ( condition: GetWrappedTokens_wrappedTokens_position_conditions,
-        oldCondition: GetWrappedTokens_wrappedTokens_position_conditions | null,
+        userAddedTokens: Token[],
         provider: Web3Provider,
         removeToken: ( chainId: number, address: string) => void,
         addToken: ( token: Token ) => void,
         tokenAddresses: string[] | undefined,
         chainId: ChainId | undefined )  => {
 
-      updateCollateralTokens( condition, oldCondition, removeToken, addToken, tokenAddresses, chainId, provider )
+      updateCollateralTokens( condition, userAddedTokens, removeToken, addToken, tokenAddresses, chainId, provider )
       dispatch(selectCondition( { condition: condition } ))
 
     },
