@@ -128,3 +128,8 @@ export function useSocksController(): Contract | null {
     false
   )
 }
+
+export function useCTContract(): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId ? CONDITIONAL_TOKENS[chainId],  : undefined, CT_ABI, true)
+}
