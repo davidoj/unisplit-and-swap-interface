@@ -13,6 +13,11 @@ export interface ConditionWithQuestionsFragment_question {
   title: string | null;
 }
 
+export interface ConditionWithQuestionsFragment_positions {
+  __typename: "Position";
+  collateralTokenAddress: string;
+}
+
 export interface ConditionWithQuestionsFragment {
   __typename: "Condition";
   id: string;
@@ -21,4 +26,5 @@ export interface ConditionWithQuestionsFragment {
   outcomeSlotCount: number;
   resolved: boolean;
   question: ConditionWithQuestionsFragment_question | null;
+  positions: ConditionWithQuestionsFragment_positions[] | null;
 }

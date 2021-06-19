@@ -36,7 +36,7 @@ export type TokenAddressMap = Readonly<
 /**
  * An empty result, useful as a default.
  */
-const EMPTY_LIST: TokenAddressMap = {
+export const EMPTY_LIST: TokenAddressMap = {
   [ChainId.KOVAN]: {},
   [ChainId.RINKEBY]: {},
   [ChainId.ROPSTEN]: {},

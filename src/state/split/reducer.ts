@@ -21,7 +21,9 @@ export default createReducer<SplitState>(initialState, builder =>
     .addCase(
       replaceSplitState,
       (state, { payload: { typedCollateralValue, condition, collateralId } }) => {
+
         const conditionClone = cloneDeep(condition).value()
+
         return {
           collateralId: collateralId,
           condition: conditionClone,
@@ -43,7 +45,9 @@ export default createReducer<SplitState>(initialState, builder =>
       }
     })
     .addCase(selectCondition, (state, { payload: { condition } }) => {
+
         const conditionClone = cloneDeep(condition).value()
+
         return {
           ...state,
           condition: conditionClone
