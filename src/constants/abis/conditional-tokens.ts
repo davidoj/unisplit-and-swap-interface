@@ -1,3 +1,6 @@
+import { ChainId } from '@uniswap/sdk'
+
+
 const CT_ABI = [
     'function prepareCondition(address oracle, bytes32 questionId, uint outcomeSlotCount) external',
     'event ConditionPreparation(bytes32 indexed conditionId, address indexed oracle, bytes32 indexed questionId, uint outcomeSlotCount)',
@@ -20,12 +23,12 @@ const CT_ABI = [
     'function symbol() external view returns (string)',
   ]
 
-CT_ADDRESSES = {REACT_APP_CONDITIONAL_TOKEN_CONTRACT_ADDRESS_FOR_MAINNET='0xC59b0e4De5F1248C1140964E0fF287B192407E0C'
-REACT_APP_CONDITIONAL_TOKEN_CONTRACT_ADDRESS_FOR_RINKEBY='0x36bede640D19981A82090519bC1626249984c908'
-REACT_APP_CONDITIONAL_TOKEN_CONTRACT_ADDRESS_FOR_GANACHE='0xA57B8a5584442B467b4689F1144D269d096A3daF'
-REACT_APP_CONDITIONAL_TOKEN_CONTRACT_ADDRESS_FOR_XDAI='0xCeAfDD6bc0bEF976fdCd1112955828E00543c0Ce'
-
+const CT_ADDRESSES: { [chainId in ChainId]?: string } = {
+  [ChainId.MAINNET]:'0xC59b0e4De5F1248C1140964E0fF287B192407E0C',
+  [ChainId.RINKEBY]:'0x36bede640D19981A82090519bC1626249984c908'
 }
 
+const NULL_PARENT_ID = '0x0000000000000000000000000000000000000000000000000000000000000000'
 
-export { CT_ABI, CT_ADDRESSES}
+
+export { CT_ABI, CT_ADDRESSES, NULL_PARENT_ID }

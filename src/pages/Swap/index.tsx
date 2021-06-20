@@ -43,6 +43,7 @@ import {
   useSplitState, 
   useSplitActionHandlers,
   useDerivedSplitInfo } from '../../state/split/hooks'
+import { useSplitCallback } from '../../hooks/useSplitCallback'
 import { collateralField} from '../../state/split/actions'
 import { useExpertModeManager, useUserSlippageTolerance, useUserSingleHopOnly } from '../../state/user/hooks'
 import { LinkStyledButton, TYPE } from '../../theme'
@@ -192,6 +193,8 @@ export default function Swap() {
     },
     [onConditionSelection, userAddedTokens, addToken, chainId, provider, removeToken]
   )
+
+  const { callback: splitCallback, error: splitCallbackError } = useSplitCallback()
 
   // modal and loading
   const [{ showConfirm, tradeToConfirm, swapErrorMessage, attemptingTxn, txHash }, setSwapState] = useState<{
