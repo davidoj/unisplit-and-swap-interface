@@ -29,10 +29,17 @@ export interface WrappedTokenWithConditionsFragment_position_conditions {
   positions: WrappedTokenWithConditionsFragment_position_conditions_positions[] | null;
 }
 
+export interface WrappedTokenWithConditionsFragment_position_collection {
+  __typename: "Collection";
+  id: string;
+  indexSets: any[];
+}
+
 export interface WrappedTokenWithConditionsFragment_position {
   __typename: "Position";
   id: string;
   conditions: WrappedTokenWithConditionsFragment_position_conditions[];
+  collection: WrappedTokenWithConditionsFragment_position_collection;
 }
 
 export interface WrappedTokenWithConditionsFragment {

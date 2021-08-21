@@ -29,10 +29,17 @@ export interface GetWrappedTokens_wrappedTokens_position_conditions {
   positions: GetWrappedTokens_wrappedTokens_position_conditions_positions[] | null;
 }
 
+export interface GetWrappedTokens_wrappedTokens_position_collection {
+  __typename: "Collection";
+  id: string;
+  indexSets: any[];
+}
+
 export interface GetWrappedTokens_wrappedTokens_position {
   __typename: "Position";
   id: string;
   conditions: GetWrappedTokens_wrappedTokens_position_conditions[];
+  collection: GetWrappedTokens_wrappedTokens_position_collection;
 }
 
 export interface GetWrappedTokens_wrappedTokens {

@@ -24,6 +24,13 @@ const conditionWithQuestionsFragment = gql`
   }
 `
 
+const collectionWithIndexSetsFragment = gql`
+  fragment CollectionWithIndexSetsFragment on Collection {
+    id
+    indexSets
+  }
+`
+
 const wrappedTokenWithConditionsFragment = gql`
   fragment WrappedTokenWithConditionsFragment on WrappedToken {
     id
@@ -31,6 +38,9 @@ const wrappedTokenWithConditionsFragment = gql`
       id
       conditions {
         ...ConditionWithQuestionsFragment
+      }
+      collection {
+        ...CollectionWithIndexSetsFragment
       }
     }
   }
@@ -45,4 +55,5 @@ export const GetWrappedTokens = gql`
   ${wrappedTokenWithConditionsFragment}
   ${conditionWithQuestionsFragment}
   ${questionFragment}
+  ${collectionWithIndexSetsFragment}
 `

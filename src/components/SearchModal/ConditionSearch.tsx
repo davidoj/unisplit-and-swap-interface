@@ -1,4 +1,4 @@
-import { useWrappedTokensList } from "hooks/useWrappedTokensList"
+import { useWrappedTokensList, wrappedConditionalToken } from "hooks/useWrappedTokensList"
 import { FixedSizeList } from 'react-window'
 import useTheme from 'hooks/useTheme'
 import useToggle from 'hooks/useToggle'
@@ -13,7 +13,7 @@ import { CloseIcon, TYPE } from '../../theme'
 import React, { useCallback, useRef } from 'react'
 import ConditionList from './ConditionList'
 
-import { GetWrappedTokens_wrappedTokens, GetWrappedTokens_wrappedTokens_position_conditions } from 'queries/__generated__/GetWrappedTokens'
+import { GetWrappedTokens_wrappedTokens_position_conditions } from 'queries/__generated__/GetWrappedTokens'
 
 
 const ContentWrapper = styled(Column)`
@@ -30,8 +30,12 @@ interface ConditionSearchProps {
   // conditionWrappedTokens: GetWrappedTokens_wrappedTokens[]
 }
 
+interface splittableCondition {
+  id: string
+  question: 
+}
 
-function extractConditions (wrappedTokens : GetWrappedTokens_wrappedTokens[] | undefined) {
+function extractConditions (wrappedTokens : wrappedConditionalToken[] | undefined) {
   if (wrappedTokens === undefined || wrappedTokens.length == 0) {
     return undefined
   }
@@ -53,9 +57,9 @@ export function ConditionSearch({
 
   const fixedList = useRef<FixedSizeList>()
 
-  const { loading, error, data } = useWrappedTokensList()
+  const { loading, error, wrappedConditionalTokens } = useWrappedTokensList()
 
-	const ctConditionsWithWrappedTokens =  extractConditions(data?.wrappedTokens)
+	const ctConditionsWithWrappedTokens =  extractConditions(wrappedConditionalTokens)
 
   const handleConditionSelect = useCallback(
     (condition: GetWrappedTokens_wrappedTokens_position_conditions) => {
